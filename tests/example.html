@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Builder Example</title>
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" data-home="https://vuejs.org/v2/guide/installation.html"></script>
+    <script src="../src/vue-builder.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div v-if="dataChanged">data has been modified</div>
+        <ul>
+            <li>mounted hook1: {{ changeOnMountOne }}</li>
+            <li>mounted hook1: {{ changeOnMountTwo }}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    Vue.add({
+        el: '#app'
+    })
+
+    Vue.add(function() {
+
+        function dataWatcher() {
+            this.dataChanged = true;
+            setTimeout(function() {
+                this.dataChanged = false
+            }.bind(this), 1000)
+
+
+        }
+
+        return {
+            data: {
+                changeOnMountOne: 'this will change in 2 seconds',
+                changeOnMountTwo: 'this will change 5 seconds',
+                dataChanged: false
+            },
+            watch: {
+                changeOnMountOne: dataWatcher,
+                changeOnMountTwo: dataWatcher,
+
+            }
+        }
+    }())
+
+    Vue.add({
+        mounted: function() {
+            setTimeout(function() {
+                this.changeOnMountOne = 'Data changed in mounted function one'
+            }.bind(this), 2000)
+        }
+    })
+    Vue.add({
+        mounted: function() {
+            setTimeout(function() {
+                this.changeOnMountTwo = 'Data changed in mounted function two'
+            }.bind(this), 5000)
+        }
+    })
+
+
+
+    Vue.build();
+</script>
+
+</html>
